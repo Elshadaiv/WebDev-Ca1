@@ -10,4 +10,16 @@ public void doGet(HttpServletRequest requst, HttpServletResponse respone) throws
 		{
 			e.printStackTrace();
 		}
+		try {
+			PreparedStatement createUser = connection.prepareStatement(
+					"INSERT into User "
+							+ "(Loyalty)" +" VALUES (?, ?, ?)");
+			createUser.setString(1, request.getParameter("username"));
+			createUser.setString(2, request.getParameter("Password1"));
+			createUser.setString(1, request.getParameter("Password2"));
+			int rowsUpdated = createUser.executeUpdate();
+			createUser.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 }
