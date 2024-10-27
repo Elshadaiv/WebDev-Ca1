@@ -11,16 +11,38 @@ public void doGet(HttpServletRequest requst, HttpServletResponse respone) throws
 			e.printStackTrace();
 		}
 		try {
-			if(request.getParameter("Password1").equalsIgnoreCase("Password2"));
+			if(connection != null && request.getParameter("Password1").equals(request.getParameter("Password2")));
 			PreparedStatement createUser = connection.prepareStatement(
 					"INSERT into User "
-							+ "(Loyalty)" +" VALUES (?, ?, ?)");
-			createUser.setString(1, request.getParameter("username"));
+							+ "(Username, Password, Points)" +" VALUES (?, ?, ?)");
+			createUser.setString(1, request.getParameter("Username"));
 			createUser.setString(2, request.getParameter("Password1"));
-			createUser.setString(3, request.getParameter("Password2"));
+			createUser.setInt(3, 100);
 			int rowsUpdated = createUser.executeUpdate();
 			createUser.close();
-		} catch (SQLException e1) {
+			
+			if (rowsUpdated > 0)
+			{
+				response.sendRedirect("LoyaltyHomePage.html");
+			}
+			
+			else 
+			{
+				response.getWriter().println("Error, Please try again");
+			}
+		
+		} catch (SQLException e1) 
+		{
 			e1.printStackTrace();
 		}
+
+		
+		if (request.getParameter("Password")!=(request.getParameter("Password2")));
+		{
+			response.getWriter().println("Password doesn't match, Please try again");
+
+		}
+			
+	}
+
 }
