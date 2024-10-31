@@ -16,5 +16,28 @@ public void doGet(HttpServletRequest request, HttpServletResponse response) thro
 		int SpendPoints = request.getParameter("SpendPoints");
 		PreparedStatement getUserPoints = connection.prepareStatement("SELECT Points FROM user WHERE Username = ?");
 		getUserPoints.setString(1, username);
+		ResultSet resultSet = getUserPoints.executeQuery();
+		
+		if(resultSet.next())
+		{
+			int points = resultSet.getInt("Points");
+		
+		
+		if(AddPoints > 0)
+		{
+			points +=AddPoints;
+			
+			PreparedStatement updatePoints = connection.prepareStatement("UPDATE User SET Points = ? WHERE Username = ?");
+			updatePoints.setInt(1, points);
+			updatePoints.setString(2, username);
+			updatePoints.executeUpdate();
+			
+			System.out.println("<html><head><title>LOYALTY POINTS ADDED </title></head>"
+					+ "<body> <h1> "+AddPoints+" have been added. Your new balance is " + points
+					+"</h1></body></html>");
+			
+			updatePoints.close();
+			
+		}
 	}
 }
