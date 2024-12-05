@@ -31,3 +31,51 @@ public class strutsLogin {
 		this.password = password;
 	}
 	
+	
+	// this the method to be called by the struts
+	
+	public String LoginMethod() {
+	    String result = "success";
+	    Connection connection = null;
+
+	    try {
+	       
+	        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecommerce?serverTimezone=UTC", "root", "root");
+	        
+	
+	        String login = "SELECT * FROM users WHERE username = ? AND password = ?"; //selects the user username and password from the database
+	        PreparedStatement statement = connection.prepareStatement(login);
+
+	   
+	        statement.setString(1, username); 
+	        statement.setString(2, password); 
+
+	        ResultSet rs = statement.executeQuery();
+	        if (!rs.next())
+	        {
+	            result = "input"; 
+	        }
+	      
+	        rs.close();
+	        statement.close();
+	    } 
+	    catch (SQLException e)
+	    {
+	        e.printStackTrace();
+	        result = "error";
+	    } 
+	    
+	        try 
+	        {
+	            if (connection != null) 
+	            {
+	                connection.close();
+	            }
+	        } 
+	        catch (SQLException e) 
+	        {
+	            e.printStackTrace();
+	        }
+	    return result;
+	}
+}
