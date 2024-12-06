@@ -42,25 +42,26 @@ public class addItem
     {
 	    String result = "success";
     	Connection connection = null;
+    	String username = null;
     	
     	try {
 	        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ecommerce?serverTimezone=UTC", "root", "root");
-            String add = "INSERT INTO items (seller_id item_name, item_description, starting_price) VALUES (?, ?, ?)";
+            String add = "INSERT INTO items ( item_name, item_description, starting_price) VALUES (?, ?, ?)";
             
             PreparedStatement statement = connection.prepareStatement(add);
             
             String getUserId = "SELECT id FROM users WHERE username = ?";
             PreparedStatement getUserIdStatement = connection.prepareStatement(getUserId);
-            
+            getUserIdStatement.setString(1, username);
+
 
 	        ResultSet rs = statement.executeQuery();
-	        int sellerId = 0;
+
             if (rs.next()) 
             {
-                sellerId = rs.getInt("id");
+             
             }
-            
-            statement.setInt(1, sellerId);
+ 
             statement.setString(2, itemName);
             statement.setString(3, itemDescription);
             statement.setDouble(4, startingPrice);
@@ -77,4 +78,3 @@ public class addItem
     	   return result;
     }
  
-}
